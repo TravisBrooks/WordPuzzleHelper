@@ -15,7 +15,7 @@ namespace WordPuzzleHelper
         /// <param name="wordPattern"></param>
         public UnknownWord(string wordPattern)
         {
-            WordPattern = wordPattern;
+            WordPattern = wordPattern.Trim().ToLower();
             _newWordTemplate = new string[wordPattern.Length];
             UnknownCharCount = wordPattern.Length - (wordPattern.Replace(UnknownToken, string.Empty)).Length;
             for (var i = 0; i < wordPattern.Length; i++)
@@ -39,10 +39,13 @@ namespace WordPuzzleHelper
         /// <param name="subWordCounts"></param>
         public void SetSubWordCounts(int[] subWordCounts)
         {
-            var subWordLength = subWordCounts.Sum();
-            if (subWordLength != WordPattern.Length)
+            if (subWordCounts != null)
             {
-                throw new ArgumentException("Summing all the word counts is " + subWordLength + " but unknown word has " + WordPattern.Length + " letters.");
+                var subWordLength = subWordCounts.Sum();
+                if (subWordLength != WordPattern.Length)
+                {
+                    throw new ArgumentException("Summing all the word counts is " + subWordLength + " but unknown word has " + WordPattern.Length + " letters.");
+                }
             }
 
             SubWordCounts = subWordCounts;
@@ -72,7 +75,7 @@ namespace WordPuzzleHelper
                 var letter = newWordArr[i];
                 if (letter == UnknownToken)
                 {
-                    newWordArr[i] = letters[letterIndex++];
+                    newWordArr[i] = letters[letterIndex++].ToLower();
                 }
             }
 
