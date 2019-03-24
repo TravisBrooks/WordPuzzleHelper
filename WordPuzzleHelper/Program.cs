@@ -75,18 +75,25 @@ namespace WordPuzzleHelper
                     Console.WriteLine($"Enter what you know about the word with {UnknownWord.UnknownToken} for missing characters:");
                     var unknownWord = _ReadUnknownWord();
 
-                    // TODO: extract this out to be a call like above that returns int[] to set SetSubWordCounts on unknownPattern.
                     Console.WriteLine("If there is more than 1 word enter letter count of each word followed by space, if 1 word just ENTER.");
                     Console.WriteLine("Example: if the solved clue is THATSALLFOLKS then the letter counts to type are '5 3 5':");
                     var subwordCount = _ReadSubWordCount();
                     unknownWord.SetSubWordCounts(subwordCount);
 
                     var matches = WordSearcher.Search(knownWords, unknownWord, letters);
-                    Console.WriteLine($"Found {matches.Count()} potential matches:");
-                    foreach (var match in matches)
+                    if (matches.Any())
                     {
-                        Console.WriteLine(match);
+                        Console.WriteLine($"Found {matches.Count()} potential matches:");
+                        foreach (var match in matches)
+                        {
+                            Console.WriteLine(match);
+                        }
                     }
+                    else
+                    {
+                        Console.WriteLine("No Matches found...");
+                    }
+
                     Console.WriteLine();
                     //runLoop = false;
                 }
