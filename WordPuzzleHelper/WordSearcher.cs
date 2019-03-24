@@ -7,17 +7,16 @@ namespace WordPuzzleHelper
     {
         public static IEnumerable<string> Search(KnownWords knownWords, UnknownWord unknownWord, List<string> availableLetters)
         {
-            var wordPool = knownWords.AllWordsOfLength(unknownWord.WordPattern.Length);
-            var potentialMatches = new HashSet<string>();
-            if (wordPool.Count == 0)
+            if (_AllUnknownWordLengthsReasonable(knownWords, unknownWord) == false)
             {
-                return potentialMatches;
+                return new HashSet<string>();
             }
 
+            var potentialMatches = new HashSet<string>();
             foreach (var replacementLetters in Permutations.OfSampleSize(availableLetters, unknownWord.UnknownCharCount))
             {
                 var subWords = unknownWord.FillInUnknown(replacementLetters);
-                if (subWords.All(word => wordPool.Contains(word)))
+                if (subWords.All(knownWords.IsKnownWord))
                 {
                     var newWord = string.Join(" ", subWords);
                     potentialMatches.Add(newWord);
@@ -25,6 +24,26 @@ namespace WordPuzzleHelper
             }
 
             return potentialMatches.OrderBy(w => w).ToList();
+        }
+
+        private static bool _AllUnknownWordLengthsReasonable(KnownWords knownWords, UnknownWord unknownWord)
+        {
+            if (unknownWord.SubWordCounts == null)
+            {
+                if (knownWords.AllWordsOfLength(unknownWord.WordPattern.Length).Count == 0)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (unknownWord.SubWordCounts.Any(cnt => knownWords.AllWordsOfLength(cnt).Count == 0))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

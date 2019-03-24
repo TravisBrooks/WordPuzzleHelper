@@ -6,15 +6,14 @@ namespace WordPuzzleHelper
 {
     public class KnownWords
     {
-        private string _wordFileName;
-        private bool _loadedWords;
-        private Dictionary<int, HashSet<string>> _lenToWordsIndex;
+        private readonly string _wordFileName;
+        private readonly Lazy<Dictionary<int, HashSet<string>>> _lenToWordsIndex;
 
         public KnownWords(string wordFileName)
         {
             if (File.Exists(wordFileName) == false)
             {
-                wordFileName = Path.Combine(System.IO.Directory.GetCurrentDirectory(), wordFileName);
+                wordFileName = Path.Combine(Directory.GetCurrentDirectory(), wordFileName);
                 if (File.Exists(wordFileName) == false)
                 {
                     throw new ArgumentException("could not find file: " + wordFileName);
@@ -22,39 +21,42 @@ namespace WordPuzzleHelper
             }
 
             _wordFileName = wordFileName;
-            _loadedWords = false;
+            _lenToWordsIndex = new Lazy<Dictionary<int, HashSet<string>>>(_LazyLoadWords);
         }
 
         public HashSet<string> AllWordsOfLength(int wordLen)
         {
-            _LoadWords();
-            if (_lenToWordsIndex.ContainsKey(wordLen) == false)
+            if (_lenToWordsIndex.Value.ContainsKey(wordLen) == false)
             {
                 return new HashSet<string>();
             }
 
-            return _lenToWordsIndex[wordLen];
+            return _lenToWordsIndex.Value[wordLen];
         }
 
-        private void _LoadWords()
+        public bool IsKnownWord(string word)
         {
-            if (_loadedWords == false)
+            var wordSet = AllWordsOfLength(word.Length);
+            var isKnown = wordSet.Contains(word);
+            return isKnown;
+        }
+
+        private Dictionary<int, HashSet<string>> _LazyLoadWords()
+        {
+            var lenToWords = new Dictionary<int, HashSet<string>>();
+            var file = new StreamReader(_wordFileName);
+            string line = null;
+            while ((line = file.ReadLine()) != null)
             {
-                _lenToWordsIndex = new Dictionary<int, HashSet<string>>();
-                var file = new StreamReader(_wordFileName);
-                string line = null;
-                while ((line = file.ReadLine()) != null)
+                line = line.Trim().ToLower();
+                var len = line.Length;
+                if (lenToWords.ContainsKey(len) == false)
                 {
-                    line = line.Trim().ToLower();
-                    var len = line.Length;
-                    if (_lenToWordsIndex.ContainsKey(len) == false)
-                    {
-                        _lenToWordsIndex[len] = new HashSet<string>();
-                    }
-                    _lenToWordsIndex[len].Add(line);
+                    lenToWords[len] = new HashSet<string>();
                 }
-                _loadedWords = true;
+                lenToWords[len].Add(line);
             }
+            return lenToWords;
         }
     }
 }
