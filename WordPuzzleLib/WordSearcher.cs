@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WordPuzzleHelper
+namespace WordPuzzleLib
 {
     public static class WordSearcher
     {
@@ -13,7 +13,7 @@ namespace WordPuzzleHelper
             }
 
             var potentialMatches = new HashSet<string>();
-            foreach (var replacementLetters in Permutations.OfSampleSize(availableLetters, unknownWord.UnknownCharCount))
+            foreach (var replacementLetters in Permutations.OfSampleSize<string>(availableLetters, unknownWord.UnknownCharCount))
             {
                 var subWords = unknownWord.FillInUnknown(replacementLetters);
                 if (subWords.All(knownWords.IsKnownWord))
@@ -23,7 +23,7 @@ namespace WordPuzzleHelper
                 }
             }
 
-            return potentialMatches.OrderBy(w => w).ToList();
+            return potentialMatches.OrderBy<string, string>(w => w).ToList();
         }
 
         private static bool _AllUnknownWordLengthsReasonable(KnownWords knownWords, UnknownWord unknownWord)

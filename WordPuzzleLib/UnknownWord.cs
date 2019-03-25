@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WordPuzzleHelper
+namespace WordPuzzleLib
 {
     public class UnknownWord
     {
@@ -80,7 +80,7 @@ namespace WordPuzzleHelper
             }
 
             var newWord = string.Join(String.Empty, newWordArr);
-            if (SubWordCounts == null || SubWordCounts.Any() == false)
+            if (SubWordCounts == null || Enumerable.Any<int>(SubWordCounts) == false)
             {
                 return new[] { newWord };
             }
