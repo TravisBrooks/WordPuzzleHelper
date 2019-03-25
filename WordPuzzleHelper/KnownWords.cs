@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace WordPuzzleLib
+namespace WordPuzzleHelper
 {
     public class KnownWords
     {

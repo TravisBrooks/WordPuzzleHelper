@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WordPuzzleLib
+namespace WordPuzzleHelper
 {
     public static class Permutations
     {
