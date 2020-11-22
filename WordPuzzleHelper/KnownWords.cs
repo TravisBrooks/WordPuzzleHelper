@@ -44,18 +44,22 @@ namespace WordPuzzleHelper
         private Dictionary<int, HashSet<string>> _LazyLoadWords()
         {
             var lenToWords = new Dictionary<int, HashSet<string>>();
-            var file = new StreamReader(_wordFileName);
-            string line = null;
-            while ((line = file.ReadLine()) != null)
+            using (var file = new StreamReader(_wordFileName))
             {
-                line = line.Trim().ToLower();
-                var len = line.Length;
-                if (lenToWords.ContainsKey(len) == false)
+                string line = null;
+                while ((line = file.ReadLine()) != null)
                 {
-                    lenToWords[len] = new HashSet<string>();
+                    line = line.Trim().ToLower();
+                    var len = line.Length;
+                    if (lenToWords.ContainsKey(len) == false)
+                    {
+                        lenToWords[len] = new HashSet<string>();
+                    }
+
+                    lenToWords[len].Add(line);
                 }
-                lenToWords[len].Add(line);
             }
+
             return lenToWords;
         }
     }
