@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WordPuzzleHelper
 {
-    class Program
+    static class Program
     {
         private static string _ReadLn()
         {
@@ -60,6 +60,46 @@ namespace WordPuzzleHelper
 
             return intList.ToArray();
         }
+
+
+        // Nov 21 2020
+        // I think what i really want is instead of a do it all single thing is to have different options to do specific types of puzzles:
+        // Crossword
+        // Anagram
+        // Scrabble
+        // Raw access (current behavior)
+
+
+        // this is a temporary experiment, planning on redoing the console menu
+        //static void Main_Faster(string[] args)
+        //{
+        //    var knownWords = new KnownWords(ConfigValues.WordFileName);
+        //    Console.WriteLine("Enter word pattern, use ? for unknown letters");
+        //    var wordPattern = _ReadLn();
+        //    var wordsOfCorrectLen = knownWords.AllWordsOfLength(wordPattern.Length);
+        //    var matches = wordsOfCorrectLen.Where(word => _WordMatchesPattern(word, wordPattern)).OrderBy(w => w);
+        //    Console.WriteLine("Matches:\r\n" + string.Join("\r\n", matches));
+        //}
+
+        //private static bool _WordMatchesPattern(string word, string wordPattern)
+        //{
+        //    for (var i=0; i<word.Length; i++)
+        //    {
+        //        var patternChar = wordPattern[i];
+        //        if (patternChar == '?')
+        //        {
+        //            continue;
+        //        }
+
+        //        var wordChar = word[i];
+        //        if (wordChar != patternChar)
+        //        {
+        //            return false;
+        //        }
+        //    }
+
+        //    return true;
+        //}
 
         static void Main(string[] args)
         {

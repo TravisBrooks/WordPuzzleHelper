@@ -7,6 +7,9 @@ namespace WordPuzzleHelper
     {
         public static IEnumerable<string> Search(KnownWords knownWords, UnknownWord unknownWord, List<string> availableLetters)
         {
+            // This word search algorithm is more difficult than necessary because it takes the availableLetters param. Most word puzzles
+            // don't have a funny alphabet or a fixed pool of known letters (like scrabble) so this extra work is not necessary.
+            // Contemplating a fast/simple version for the typical crossword style puzzle
             if (_AllUnknownWordLengthsReasonable(knownWords, unknownWord) == false)
             {
                 return new HashSet<string>();

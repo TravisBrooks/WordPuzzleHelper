@@ -7,7 +7,7 @@ namespace WordPuzzleHelper
     public class UnknownWord
     {
         public const string UnknownToken = "?";
-        private string[] _newWordTemplate;
+        private readonly string[] _newWordTemplate;
 
         /// <summary>
         /// Give a pattern for the unknown word with known letters filled and and UnknownToken used for missing letters
