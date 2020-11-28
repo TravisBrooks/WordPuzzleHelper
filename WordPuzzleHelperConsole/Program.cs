@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using WordPuzzleHelper;
 
-namespace WordPuzzleHelper
+namespace WordPuzzleHelperConsole
 {
     static class Program
     {

@@ -19,7 +19,7 @@ namespace WordPuzzleHelper.Puzzle
             var wordPattern = new string('?', originalWord.Length);
             var unknownWord = new UnknownWord(wordPattern);
             var letters = originalWord.Select(c => c.ToString()).ToList();
-            var matches = WordSearcher.Search(_knownWords, unknownWord, letters).Where(ana => string.Equals(originalWord, ana) == false).ToList();
+            var matches = WordSearcher.Search(KnownWords, unknownWord, letters).Where(ana => string.Equals(originalWord, ana) == false).ToList();
 
             return matches;
         }

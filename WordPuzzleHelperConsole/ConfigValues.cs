@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 
-namespace WordPuzzleHelper
+namespace WordPuzzleHelperConsole
 {
     public static class ConfigValues
     {

@@ -2,11 +2,11 @@
 {
     public abstract class BasePuzzle
     {
-        protected readonly KnownWords _knownWords;
+        protected readonly KnownWords KnownWords;
 
         protected BasePuzzle(KnownWords knownWords)
         {
-            _knownWords = knownWords;
+            KnownWords = knownWords;
         }
     }
 }

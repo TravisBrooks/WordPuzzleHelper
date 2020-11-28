@@ -12,7 +12,7 @@ namespace WordPuzzleHelper.Puzzle
         public IEnumerable<string> Solve(List<string> letters, string wordPattern)
         {
             var unknownWord = new UnknownWord(wordPattern);
-            var matches = WordSearcher.Search(_knownWords, unknownWord, letters);
+            var matches = WordSearcher.Search(KnownWords, unknownWord, letters);
             // TODO: sort the words with the highest scrabble point value first
             return matches;
         }

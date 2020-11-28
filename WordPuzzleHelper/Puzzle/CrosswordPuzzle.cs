@@ -4,16 +4,18 @@ namespace WordPuzzleHelper.Puzzle
 {
     public class CrosswordPuzzle : BasePuzzle
     {
-        public CrosswordPuzzle(KnownWords knownWords) : base(knownWords)
+        private readonly string[] _defaultAlphabet;
+
+        public CrosswordPuzzle(KnownWords knownWords, string[] defaultAlphabet) : base(knownWords)
         {
+            _defaultAlphabet = defaultAlphabet;
         }
 
         public IEnumerable<string> Solve(string wordPattern, int[] subWordCount)
         {
-            var letters = ConfigValues.DefaultAlphabet;
             var unknownWord = new UnknownWord(wordPattern);
             unknownWord.SetSubWordCounts(subWordCount);
-            var matches = WordSearcher.Search(_knownWords, unknownWord, letters);
+            var matches = WordSearcher.Search(KnownWords, unknownWord, _defaultAlphabet);
 
             return matches;
         }

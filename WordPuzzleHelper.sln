@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordPuzzleHelperConsole", "WordPuzzleHelperConsole\WordPuzzleHelperConsole.csproj", "{D2A8458C-0692-4254-BA9A-5D485D6A0F13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordPuzzleHelper", "WordPuzzleHelper\WordPuzzleHelper.csproj", "{F601FCB9-CA72-49E4-8D3A-55E02327702A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2A8458C-0692-4254-BA9A-5D485D6A0F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A8458C-0692-4254-BA9A-5D485D6A0F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A8458C-0692-4254-BA9A-5D485D6A0F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A8458C-0692-4254-BA9A-5D485D6A0F13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F601FCB9-CA72-49E4-8D3A-55E02327702A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F601FCB9-CA72-49E4-8D3A-55E02327702A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F601FCB9-CA72-49E4-8D3A-55E02327702A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F601FCB9-CA72-49E4-8D3A-55E02327702A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {72E90599-9E8C-4E6C-AAA3-5C301AD8BF21}
+	EndGlobalSection
+EndGlobal
