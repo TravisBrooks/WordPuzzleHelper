@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace WordPuzzleHelper
@@ -105,6 +106,7 @@ namespace WordPuzzleHelper
         {
             var knownWords = new KnownWords(ConfigValues.WordFileName);
             var runLoop = true;
+            var stopwatch = new Stopwatch();
             while (runLoop)
             {
                 try
@@ -120,7 +122,11 @@ namespace WordPuzzleHelper
                     var subwordCount = _ReadSubWordCount();
                     unknownWord.SetSubWordCounts(subwordCount);
 
+                    stopwatch.Start();
                     var matches = WordSearcher.Search(knownWords, unknownWord, letters);
+                    stopwatch.Stop();
+                    var totalTime = stopwatch.Elapsed;
+                    stopwatch.Reset();
                     if (matches.Any())
                     {
                         Console.WriteLine($"Found {matches.Count()} potential matches:");
@@ -134,6 +140,7 @@ namespace WordPuzzleHelper
                         Console.WriteLine("No Matches found...");
                     }
 
+                    Console.WriteLine(totalTime.TotalMilliseconds + " total milliseconds to search");
                     Console.WriteLine();
                     //runLoop = false;
                 }
