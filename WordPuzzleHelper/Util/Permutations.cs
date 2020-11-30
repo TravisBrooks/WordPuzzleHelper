@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WordPuzzleHelper
+namespace WordPuzzleHelper.Util
 {
     public static class Permutations
     {
@@ -15,12 +15,13 @@ namespace WordPuzzleHelper
 
             if (sampleSize <= 0)
             {
-                throw new ArgumentException("sampleSize must be greater than 0, was " + sampleSize);
+                throw new ArgumentException($"sampleSize must be greater than 0, was {sampleSize}");
             }
 
             if (someList.Count < sampleSize)
             {
-                throw new ArgumentException("sampleSize cannot be greater than list length, sampleSize: " + sampleSize + ", list length: " + someList.Count);
+                throw new ArgumentException(
+                    $"sampleSize cannot be greater than list length, sampleSize: {sampleSize}, list length: {someList.Count}");
             }
 
             if (sampleSize == 1)

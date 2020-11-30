@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using WordPuzzleHelper.Util;
 
 namespace WordPuzzleHelper
 {
@@ -16,6 +18,7 @@ namespace WordPuzzleHelper
             }
 
             var potentialMatches = new HashSet<string>();
+            // TODO: the permutation thing seems non-optimal. Instead should try to filter the known words.
             foreach (var replacementLetters in Permutations.OfSampleSize(availableLetters, unknownWord.UnknownCharCount))
             {
                 var subWords = unknownWord.FillInUnknown(replacementLetters);
@@ -31,7 +34,7 @@ namespace WordPuzzleHelper
 
         private static bool _AllUnknownWordLengthsReasonable(KnownWords knownWords, UnknownWord unknownWord)
         {
-            if (unknownWord.SubWordCounts == null)
+            if (unknownWord.SubWordCounts == null || unknownWord.SubWordCounts.Any() == false)
             {
                 if (knownWords.AllWordsOfLength(unknownWord.WordPattern.Length).Count == 0)
                 {

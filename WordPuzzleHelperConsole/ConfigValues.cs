@@ -18,7 +18,7 @@ namespace WordPuzzleHelperConsole
 
         public static string WordFileName => _ReadStr("word-file");
 
-        public static List<string> DefaultAlphabet
+        public static string[] DefaultAlphabet
         {
             get
             {
@@ -26,7 +26,7 @@ namespace WordPuzzleHelperConsole
                 var alphas = alphaStr
                     .Where(c => char.IsWhiteSpace(c) == false)
                     .Select(c => c.ToString().ToLower())
-                    .ToList();
+                    .ToArray();
                 return alphas;
             }
         }

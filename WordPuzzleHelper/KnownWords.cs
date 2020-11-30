@@ -1,37 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace WordPuzzleHelper
 {
     public class KnownWords
     {
-        private readonly string _wordFileName;
-        private readonly Lazy<Dictionary<int, HashSet<string>>> _lenToWordsIndex;
+        // Currently this data structure is basically an index based on word length. HashSet works good for exact matching but is meh for fuzzy searching
+        private readonly Dictionary<int, HashSet<string>> _lenToWordsIndex;
 
-        public KnownWords(string wordFileName)
+        public KnownWords(IEnumerable<string> allKnownWords)
         {
-            if (File.Exists(wordFileName) == false)
+            var lenToWords = new Dictionary<int, HashSet<string>>();
+            foreach (var word in allKnownWords)
             {
-                wordFileName = Path.Combine(Directory.GetCurrentDirectory(), wordFileName);
-                if (File.Exists(wordFileName) == false)
-                {
-                    throw new ArgumentException("could not find file: " + wordFileName);
-                }
+                _AddKnownWord(lenToWords, word);
             }
+            _lenToWordsIndex = lenToWords;
+        }
 
-            _wordFileName = wordFileName;
-            _lenToWordsIndex = new Lazy<Dictionary<int, HashSet<string>>>(_LazyLoadWords);
+        public KnownWords(string wordFileName) : this(File.ReadAllLines(wordFileName))
+        {
         }
 
         public HashSet<string> AllWordsOfLength(int wordLen)
         {
-            if (_lenToWordsIndex.Value.ContainsKey(wordLen) == false)
+            if (_lenToWordsIndex.ContainsKey(wordLen) == false)
             {
                 return new HashSet<string>();
             }
 
-            return _lenToWordsIndex.Value[wordLen];
+            return _lenToWordsIndex[wordLen];
         }
 
         public bool IsKnownWord(string word)
@@ -41,26 +41,26 @@ namespace WordPuzzleHelper
             return isKnown;
         }
 
-        private Dictionary<int, HashSet<string>> _LazyLoadWords()
+        private static void _AddKnownWord(Dictionary<int, HashSet<string>> lenToWords, string word)
         {
-            var lenToWords = new Dictionary<int, HashSet<string>>();
-            using (var file = new StreamReader(_wordFileName))
+            if (string.IsNullOrWhiteSpace(word))
             {
-                string line = null;
-                while ((line = file.ReadLine()) != null)
-                {
-                    line = line.Trim().ToLower();
-                    var len = line.Length;
-                    if (lenToWords.ContainsKey(len) == false)
-                    {
-                        lenToWords[len] = new HashSet<string>();
-                    }
-
-                    lenToWords[len].Add(line);
-                }
+                return;
             }
 
-            return lenToWords;
+            word = word.Trim().ToLower();
+            if (word.Any(char.IsWhiteSpace))
+            {
+                throw new ArgumentException($"A word in the dictionary had some unexpected white space in it: {word}");
+            }
+
+            var len = word.Length;
+            if (lenToWords.ContainsKey(len) == false)
+            {
+                lenToWords[len] = new HashSet<string>();
+            }
+
+            lenToWords[len].Add(word);
         }
     }
 }

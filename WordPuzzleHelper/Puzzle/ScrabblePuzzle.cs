@@ -8,12 +8,12 @@ namespace WordPuzzleHelper.Puzzle
         {
         }
 
-        // TODO: I'm not taking the blank tile into consideration. Its a wild card initially but after its value has been assigned once then all blank tiles have that same value.
-        public IEnumerable<string> Solve(List<string> letters, string wordPattern)
+        public IEnumerable<string> Solve(List<string> availableLetters, UnknownWord partialWordOrLength)
         {
-            var unknownWord = new UnknownWord(wordPattern);
-            var matches = WordSearcher.Search(KnownWords, unknownWord, letters);
+            var matches = WordSearcher.Search(KnownWords, partialWordOrLength, availableLetters);
             // TODO: sort the words with the highest scrabble point value first
+            // TODO: I'm not taking the blank tile into consideration. Its a wild card initially but after its value has been assigned once then all blank tiles have that same value.
+            // TODO: The scrabble puzzle is pretty poorly served by whats going on here. Main issue being I don't really play scrabble that much. Maybe the word `scrabble` is wrong here???
             return matches;
         }
     }

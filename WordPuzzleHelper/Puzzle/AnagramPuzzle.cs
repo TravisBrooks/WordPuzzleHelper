@@ -14,7 +14,7 @@ namespace WordPuzzleHelper.Puzzle
         {
             if (originalWord == null || originalWord.Length < 2)
             {
-                throw new ArgumentException("You cannot create an anagram of a word unless there is at least 2 letters");
+                throw new ArgumentException("You cannot create an anagram of a word unless there are at least 2 letters");
             }
             var wordPattern = new string('?', originalWord.Length);
             var unknownWord = new UnknownWord(wordPattern);
