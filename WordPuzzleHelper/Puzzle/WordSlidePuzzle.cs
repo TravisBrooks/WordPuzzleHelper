@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WordPuzzleHelper.Puzzle
@@ -16,13 +17,18 @@ namespace WordPuzzleHelper.Puzzle
         /// fill in the blank words in a phrase by sliding individual characters down to make up the words in the phrase, with words
         /// stacked on top of each other so there are multiple characters possible for each slot in a word.
         /// </summary>
-        /// <param name="availableLetters"></param>
         /// <param name="partialWordOrLength"></param>
+        /// <param name="availableLetters"></param>
         /// <returns></returns>
-        public IEnumerable<string> Solve(char[][] availableLetters, UnknownWord partialWordOrLength)
+        public IEnumerable<string> Solve(UnknownWord partialWordOrLength, char[][] availableLetters)
         {
             var wordLen = partialWordOrLength.WordPattern.Length;
-            var searchLetters = _FillInSearchLettersFromPartialWord(availableLetters, partialWordOrLength, wordLen);
+            if (wordLen != availableLetters.Length)
+            {
+                throw new ArgumentException($"The partial word had a length of {wordLen} but the available letters only had {availableLetters.Length} slots.");
+            }
+
+            var searchLetters = _FillInSearchLettersFromPartialWord(partialWordOrLength, availableLetters);
 
             var possibleWords = KnownWords.AllWordsOfLength(wordLen);
             var matches = new List<string>();
@@ -46,18 +52,17 @@ namespace WordPuzzleHelper.Puzzle
         /// <param name="wordLen"></param>
         /// <returns></returns>
         private static HashSet<char>[] _FillInSearchLettersFromPartialWord(
-            char[][] availableLetters,
             UnknownWord partialWordOrLength,
-            int wordLen
+            char[][] availableLetters
             )
         {
-            var searchLetters = new HashSet<char>[wordLen];
-            for (var i = 0; i < wordLen; i++)
+            var searchLetters = new HashSet<char>[availableLetters.Length];
+            for (var i = 0; i < availableLetters.Length; i++)
             {
                 var c = partialWordOrLength.WordPattern[i];
-                if (c == UnknownWord.UnknownToken[0]) // TODO: de-string things throughout app when char will work just fine
+                if (c == UnknownWord.UnknownToken)
                 {
-                    searchLetters[i] =  new HashSet<char>(availableLetters[i]);;
+                    searchLetters[i] =  new HashSet<char>(availableLetters[i]);
                 }
                 else
                 {

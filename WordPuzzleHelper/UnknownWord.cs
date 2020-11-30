@@ -6,7 +6,7 @@ namespace WordPuzzleHelper
 {
     public class UnknownWord
     {
-        public const string UnknownToken = "?";
+        public const char UnknownToken = '?';
         private readonly string[] _newWordTemplate;
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace WordPuzzleHelper
         {
             WordPattern = wordPattern.Trim().ToLower();
             _newWordTemplate = new string[wordPattern.Length];
-            UnknownCharCount = wordPattern.Length - (wordPattern.Replace(UnknownToken, string.Empty)).Length;
+            UnknownCharCount = wordPattern.Length - (wordPattern.Replace(UnknownToken.ToString(), string.Empty)).Length;
             for (var i = 0; i < wordPattern.Length; i++)
             {
                 var letter = wordPattern[i].ToString();
@@ -57,7 +57,7 @@ namespace WordPuzzleHelper
         /// </summary>
         /// <param name="letters">Must have as many letters as there were unknown characters</param>
         /// <returns></returns>
-        public string[] FillInUnknown(IList<string> letters)
+        public string[] FillInUnknown(IList<char> letters)
         {
             var letterCnt = letters.Count;
             if (letterCnt != UnknownCharCount)
@@ -68,14 +68,14 @@ namespace WordPuzzleHelper
             var letterIndex = 0;
 
             var wordLen = _newWordTemplate.Length;
-            var newWordArr = new string[wordLen];
+            var newWordArr = new char[wordLen];
             Array.Copy(_newWordTemplate, newWordArr, wordLen);
             for (var i = 0; i < wordLen; i++)
             {
                 var letter = newWordArr[i];
                 if (letter == UnknownToken)
                 {
-                    newWordArr[i] = letters[letterIndex++].ToLower();
+                    newWordArr[i] = letters[letterIndex++];
                 }
             }
 

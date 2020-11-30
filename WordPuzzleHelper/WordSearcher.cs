@@ -7,7 +7,7 @@ namespace WordPuzzleHelper
 {
     public static class WordSearcher
     {
-        public static IEnumerable<string> Search(KnownWords knownWords, UnknownWord unknownWord, IList<string> availableLetters)
+        public static IEnumerable<string> Search(KnownWords knownWords, UnknownWord unknownWord, char[] availableLetters)
         {
             // This word search algorithm is more difficult than necessary because it takes the availableLetters param. Most word puzzles
             // don't have a funny alphabet or a fixed pool of known letters (like scrabble) so this extra work is not necessary.

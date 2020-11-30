@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using WordPuzzleHelper.Util;
 
 namespace WordPuzzleHelperConsole
 {
@@ -18,15 +17,12 @@ namespace WordPuzzleHelperConsole
 
         public static string WordFileName => _ReadStr("word-file");
 
-        public static string[] DefaultAlphabet
+        public static char[] DefaultAlphabet
         {
             get
             {
                 var alphaStr = _ReadStr("default-alphabet");
-                var alphas = alphaStr
-                    .Where(c => char.IsWhiteSpace(c) == false)
-                    .Select(c => c.ToString().ToLower())
-                    .ToArray();
+                var alphas = alphaStr.ToAlphabetArray();
                 return alphas;
             }
         }

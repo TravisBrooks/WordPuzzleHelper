@@ -8,7 +8,7 @@ namespace WordPuzzleHelper.Puzzle
         {
         }
 
-        public IEnumerable<string> Solve(List<string> availableLetters, UnknownWord partialWordOrLength)
+        public IEnumerable<string> Solve(UnknownWord partialWordOrLength, char[] availableLetters)
         {
             var matches = WordSearcher.Search(KnownWords, partialWordOrLength, availableLetters);
             // TODO: sort the words with the highest scrabble point value first

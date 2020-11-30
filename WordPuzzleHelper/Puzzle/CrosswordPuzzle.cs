@@ -4,9 +4,9 @@ namespace WordPuzzleHelper.Puzzle
 {
     public class CrosswordPuzzle : BasePuzzle
     {
-        private readonly string[] _defaultAlphabet;
+        private readonly char[] _defaultAlphabet;
 
-        public CrosswordPuzzle(KnownWords knownWords, string[] defaultAlphabet)
+        public CrosswordPuzzle(KnownWords knownWords, char[] defaultAlphabet)
             : base(knownWords)
         {
             _defaultAlphabet = defaultAlphabet;

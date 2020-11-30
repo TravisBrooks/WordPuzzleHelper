@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WordPuzzleHelper;
 using WordPuzzleHelper.Puzzle;
+using WordPuzzleHelper.Util;
 
 namespace WordPuzzleHelperConsole
 {
@@ -93,7 +94,7 @@ namespace WordPuzzleHelperConsole
             Console.WriteLine("Example: if the solved clue is THATSALLFOLKS then the letter counts to type are '5 3 5':");
             var subWordCount = _ReadSubWordCount();
 
-            var crosswordPuzzle = new CrosswordPuzzle(knownWords, ConfigValues.DefaultAlphabet.ToArray());
+            var crosswordPuzzle = new CrosswordPuzzle(knownWords, ConfigValues.DefaultAlphabet);
             var answers = crosswordPuzzle.Solve(wordPattern, subWordCount).ToList();
             Console.WriteLine($"There are {answers.Count} possible solutions:");
             foreach (var answer in answers)
@@ -138,7 +139,7 @@ namespace WordPuzzleHelperConsole
             var availableLetters = _ReadAvailableLetters();
 
             var scrabblePuzzle = new ScrabblePuzzle(knownWords);
-            var answers = scrabblePuzzle.Solve(availableLetters, wordPattern).ToList();
+            var answers = scrabblePuzzle.Solve(wordPattern, availableLetters).ToList();
 
             Console.WriteLine($"There are {answers.Count} possible solutions:");
             foreach (var answer in answers)
@@ -155,7 +156,7 @@ namespace WordPuzzleHelperConsole
             return ln;
         }
 
-        private static List<string> _ReadAvailableLetters()
+        private static char[] _ReadAvailableLetters()
         {
             var letterStr = _ReadLn();
             if (string.IsNullOrWhiteSpace(letterStr))
@@ -163,7 +164,7 @@ namespace WordPuzzleHelperConsole
                 throw new PrintToConsoleException("That was a pretty bad selection of letters, don't think you're solving this puzzle...");
             }
 
-            var letters = letterStr.Select(c => c.ToString()).ToList();
+            var letters = letterStr.ToAlphabetArray();
             return letters;
         }
 
@@ -185,7 +186,7 @@ namespace WordPuzzleHelperConsole
 
             char[][] availableLetters = _ReadWordSlideLetters(wordPattern);
             var wordSlide = new WordSlidePuzzle(knownWords);
-            var answers = wordSlide.Solve(availableLetters, wordPattern).ToList();
+            var answers = wordSlide.Solve(wordPattern, availableLetters).ToList();
 
             Console.WriteLine($"There are {answers.Count} possible solutions:");
             foreach (var answer in answers)
@@ -204,11 +205,11 @@ namespace WordPuzzleHelperConsole
             for (var i = 0; i < wordLen; i++)
             {
                 var c = wordPattern.WordPattern[i];
-                if (c == UnknownWord.UnknownToken[0]) // TODO: de-string the token
+                if (c == UnknownWord.UnknownToken)
                 {
                     Console.WriteLine("position " + (i+1) + " enter possible letters without spaces then press enter:");
                     var possibleLetters = _ReadLn();
-                    availableLetters[i] = possibleLetters.ToCharArray();
+                    availableLetters[i] = possibleLetters.ToAlphabetArray();
                 }
                 else
                 {

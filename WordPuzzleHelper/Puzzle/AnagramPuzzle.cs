@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WordPuzzleHelper.Util;
 
 namespace WordPuzzleHelper.Puzzle
 {
@@ -18,8 +19,10 @@ namespace WordPuzzleHelper.Puzzle
             }
             var wordPattern = new string('?', originalWord.Length);
             var unknownWord = new UnknownWord(wordPattern);
-            var letters = originalWord.Select(c => c.ToString()).ToList();
-            var matches = WordSearcher.Search(KnownWords, unknownWord, letters).Where(ana => string.Equals(originalWord, ana) == false).ToList();
+            var letters = originalWord.ToAlphabetArray();
+            var matches = WordSearcher.Search(KnownWords, unknownWord, letters)
+                                      .Where(ana => string.Equals(originalWord, ana) == false)
+                                      .ToList();
 
             return matches;
         }
