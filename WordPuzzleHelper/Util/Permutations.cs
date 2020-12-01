@@ -35,8 +35,8 @@ namespace WordPuzzleHelper.Util
             {
                 for (var idx = 0; idx < someList.Count; idx++)
                 {
-                    var frontOfList = someList.TakeWhile((t, i) => i < idx);
-                    var tailOfList = someList.SkipWhile((t, i) => i <= idx);
+                    var frontOfList = someList.TakeWhile((t, i) => i < idx).ToList();
+                    var tailOfList = someList.SkipWhile((t, i) => i <= idx).ToList();
                     foreach (var otherPerm in OfSampleSize(frontOfList.Concat(tailOfList).ToList(), sampleSize - 1))
                     {
                         var perm = new List<T> { someList[idx] };

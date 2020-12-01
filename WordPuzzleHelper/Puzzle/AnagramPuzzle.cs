@@ -13,17 +13,17 @@ namespace WordPuzzleHelper.Puzzle
 
         public IEnumerable<string> Solve(string originalWord)
         {
-            if (originalWord == null || originalWord.Length < 2)
+            originalWord = (originalWord ?? string.Empty).Trim();
+            if (originalWord.Length < 2)
             {
                 throw new ArgumentException("You cannot create an anagram of a word unless there are at least 2 letters");
             }
-            var wordPattern = new string('?', originalWord.Length);
+            var wordPattern = new string(UnknownWord.UnknownToken, originalWord.Length);
             var unknownWord = new UnknownWord(wordPattern);
             var letters = originalWord.ToAlphabetArray();
             var matches = WordSearcher.Search(KnownWords, unknownWord, letters)
                                       .Where(ana => string.Equals(originalWord, ana) == false)
                                       .ToList();
-
             return matches;
         }
 

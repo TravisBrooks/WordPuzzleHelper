@@ -5,13 +5,13 @@ namespace WordPuzzleHelperConsole
 {
     public static class ConfigValues
     {
-        private static readonly IConfigurationRoot _config = new ConfigurationBuilder()
+        private static readonly IConfigurationRoot Config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", false, true)
             .Build();
 
         private static string _ReadStr(string key)
         {
-            var rawVal = _config[key] ?? string.Empty;
+            var rawVal = Config[key] ?? string.Empty;
             return rawVal.Trim();
         }
 

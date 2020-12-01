@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WordPuzzleHelper
+namespace WordPuzzleHelperConsole
 {
     public class PrintToConsoleException : Exception
     {
