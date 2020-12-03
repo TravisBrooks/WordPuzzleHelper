@@ -7,7 +7,7 @@ namespace WordPuzzleHelper
     public class UnknownWord
     {
         public const char UnknownToken = '?';
-        private readonly string[] _newWordTemplate;
+        private readonly char[] _newWordTemplate;
 
         /// <summary>
         /// Give a pattern for the unknown word with known letters filled and and UnknownToken used for missing letters
@@ -16,11 +16,11 @@ namespace WordPuzzleHelper
         public UnknownWord(string wordPattern)
         {
             WordPattern = wordPattern.Trim().ToLower();
-            _newWordTemplate = new string[wordPattern.Length];
+            _newWordTemplate = new char[wordPattern.Length];
             UnknownCharCount = wordPattern.Length - (wordPattern.Replace(UnknownToken.ToString(), string.Empty)).Length;
             for (var i = 0; i < wordPattern.Length; i++)
             {
-                var letter = wordPattern[i].ToString();
+                var letter = wordPattern[i];
                 _newWordTemplate[i] = letter;
             }
         }
