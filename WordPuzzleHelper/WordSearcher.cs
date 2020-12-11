@@ -38,6 +38,7 @@ namespace WordPuzzleHelper
                 return new HashSet<string>();
             }
 
+            availableLetters = _EnsureAllLower(availableLetters);
             var searchLetters = _FillInSearchLettersFromPartialWord(unknownWord, availableLetters);
 
             var wordLen = unknownWord.WordPattern.Length;
@@ -53,6 +54,16 @@ namespace WordPuzzleHelper
 
             matches = matches.OrderBy(w => w).ToList();
             return matches;
+        }
+
+        private static char[][] _EnsureAllLower(char[][] availableLetters)
+        {
+            var lower = new List<char[]>();
+            foreach (var letters in availableLetters)
+            {
+                lower.Add(new string(letters).ToAlphabetArray());
+            }
+            return lower.ToArray();
         }
 
         private static bool _AllUnknownWordLengthsReasonable(KnownWords knownWords, UnknownWord unknownWord)

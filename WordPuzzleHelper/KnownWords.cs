@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace WordPuzzleHelper
@@ -12,6 +11,10 @@ namespace WordPuzzleHelper
 
         public KnownWords(IEnumerable<string> allKnownWords)
         {
+            if (allKnownWords == null)
+            {
+                throw new ArgumentNullException(nameof(allKnownWords));
+            }
             var lenToWords = new Dictionary<int, HashSet<string>>();
             foreach (var word in allKnownWords)
             {
@@ -20,12 +23,13 @@ namespace WordPuzzleHelper
             _lenToWordsIndex = lenToWords;
         }
 
-        public KnownWords(string wordFileName) : this(File.ReadAllLines(wordFileName))
-        {
-        }
-
         public HashSet<string> AllWordsOfLength(int wordLen)
         {
+            if (wordLen < 1)
+            {
+                throw new ArgumentException("A known word must have at least 1 character");
+            }
+
             if (_lenToWordsIndex.ContainsKey(wordLen) == false)
             {
                 return new HashSet<string>();
@@ -51,7 +55,7 @@ namespace WordPuzzleHelper
             word = word.Trim().ToLower();
             if (word.Any(char.IsWhiteSpace))
             {
-                throw new ArgumentException($"A word in the dictionary had some unexpected white space in it: {word}");
+                throw new ArgumentException($"A word in the dictionary had some unexpected white space in it (ie it is several words): {word}");
             }
 
             var len = word.Length;

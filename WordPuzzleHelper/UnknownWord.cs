@@ -10,19 +10,30 @@ namespace WordPuzzleHelper
         private readonly char[] _newWordTemplate;
 
         /// <summary>
-        /// Give a pattern for the unknown word with known letters filled and and UnknownToken used for missing letters
+        /// Give a pattern for the unknown word with known letters filled in and the UnknownToken used for missing letters
         /// </summary>
-        /// <param name="wordPattern"></param>
-        public UnknownWord(string wordPattern)
+        /// <param name="pattern"></param>
+        public UnknownWord(string pattern)
         {
-            WordPattern = wordPattern.Trim().ToLower();
-            _newWordTemplate = new char[wordPattern.Length];
-            UnknownCharCount = wordPattern.Length - (wordPattern.Replace(UnknownToken.ToString(), string.Empty)).Length;
-            for (var i = 0; i < wordPattern.Length; i++)
+            if (pattern == null)
             {
-                var letter = wordPattern[i];
-                _newWordTemplate[i] = letter;
+                throw new ArgumentNullException(nameof(pattern));
             }
+
+            if (string.IsNullOrWhiteSpace(pattern))
+            {
+                throw new ArgumentException(nameof(pattern) + " cannot be only whitespace");
+            }
+
+            pattern = pattern.Trim();
+            if (pattern.Any(char.IsWhiteSpace))
+            {
+                throw new ArgumentException($"The word pattern had some unexpected white space in it (ie it is several words): {pattern}");
+            }
+
+            WordPattern = pattern.ToLower();
+            _newWordTemplate = WordPattern.ToCharArray();
+            UnknownCharCount = WordPattern.Count(c => c == UnknownToken);
         }
 
         public readonly string WordPattern;
@@ -51,11 +62,10 @@ namespace WordPuzzleHelper
             SubWordCounts = subWordCounts;
         }
 
-
         /// <summary>
         /// Returns a new string array with the unknown characters filled in with the provided letters.
         /// </summary>
-        /// <param name="letters">Must have as many letters as there were unknown characters</param>
+        /// <param name="letters">Must have as many letters as there are unknown characters</param>
         /// <returns></returns>
         public string[] FillInUnknown(IList<char> letters)
         {
@@ -79,19 +89,19 @@ namespace WordPuzzleHelper
                 }
             }
 
-            var newWord = string.Join(String.Empty, newWordArr);
+            var newWord = new string(newWordArr);
             if (SubWordCounts == null || SubWordCounts.Any() == false)
             {
                 return new[] { newWord };
             }
 
             var newSubWords = new string[SubWordCounts.Length];
-            var currIdx = 0;
+            var currentIdx = 0;
             for (var i=0; i<newSubWords.Length; i++)
             {
-                var subWord = newWord.Substring(currIdx, SubWordCounts[i]);
+                var subWord = newWord.Substring(currentIdx, SubWordCounts[i]);
                 newSubWords[i] = subWord;
-                currIdx = SubWordCounts[i];
+                currentIdx += SubWordCounts[i];
             }
 
             return newSubWords;

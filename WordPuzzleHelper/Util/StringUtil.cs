@@ -4,6 +4,11 @@ namespace WordPuzzleHelper.Util
 {
     public static class StringUtil
     {
+        /// <summary>
+        /// This is similar to the string.ToCharArray() method, but removes all whitespace and lower cases all letters. Duplicate letters are allowed.
+        /// </summary>
+        /// <param name="allLetters"></param>
+        /// <returns></returns>
         public static char[] ToAlphabetArray(this string allLetters)
         {
             if (allLetters == null)

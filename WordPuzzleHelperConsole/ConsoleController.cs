@@ -94,7 +94,7 @@ namespace WordPuzzleHelperConsole
             Console.WriteLine("Example: if the solved clue is THATSALLFOLKS then the letter counts to type are '5 3 5':");
             var subWordCount = _ReadSubWordCount();
 
-            var crosswordPuzzle = new CrosswordPuzzle(knownWords, ConfigValues.DefaultAlphabet);
+            var crosswordPuzzle = new CrosswordPuzzle(knownWords);
             var answers = crosswordPuzzle.Solve(wordPattern, subWordCount).ToList();
             Console.WriteLine($"There are {answers.Count} possible solutions:");
             foreach (var answer in answers)

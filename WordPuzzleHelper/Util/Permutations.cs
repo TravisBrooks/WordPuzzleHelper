@@ -13,6 +13,11 @@ namespace WordPuzzleHelper.Util
                 throw new ArgumentNullException(nameof(someList));
             }
 
+            if (someList.Any() == false)
+            {
+                throw new ArgumentException($"{nameof(someList)} cannot be empty.");
+            }
+
             if (sampleSize <= 0)
             {
                 throw new ArgumentException($"sampleSize must be greater than 0, was {sampleSize}");
@@ -24,6 +29,7 @@ namespace WordPuzzleHelper.Util
                     $"sampleSize cannot be greater than list length, sampleSize: {sampleSize}, list length: {someList.Count}");
             }
 
+            // this is a reference sort of implementation of how to do permutations, intended more for clarity and accuracy then speed
             if (sampleSize == 1)
             {
                 foreach (var t in someList)
@@ -45,6 +51,35 @@ namespace WordPuzzleHelper.Util
                     }
                 }
             }
+        }
+
+        public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(IEnumerable<IEnumerable<T>> listOfLists)
+        {
+            if (listOfLists == null)
+            {
+                return null;
+            }
+            IEnumerable<IEnumerable<T>> accumulator = new[] { Enumerable.Empty<T>() };
+            foreach (var currentList in listOfLists)
+            {
+                accumulator = _CartesianProductLoop(currentList, accumulator);
+            }
+            return accumulator;
+        }
+
+        private static IEnumerable<IEnumerable<T>> _CartesianProductLoop<T>(IEnumerable<T> currentList, IEnumerable<IEnumerable<T>> accumulator)
+        {
+            // Yes, this method can all be done in 1 call to SelectMany, but I find the syntax of SelectMany to be more confusing to read
+            var localAccumulator = new List<IEnumerable<T>>();
+            foreach (var accList in accumulator)
+            {
+                foreach (var item in currentList)
+                {
+                    var accItem = accList.Concat(new[] {item});
+                    localAccumulator.Add(accItem);
+                }
+            }
+            return localAccumulator;
         }
     }
 }

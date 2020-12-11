@@ -19,6 +19,14 @@ namespace WordPuzzleHelper.Puzzle
         /// <returns></returns>
         public IEnumerable<string> Solve(UnknownWord unknownWord, char[][] availableLetters)
         {
+            if (unknownWord == null)
+            {
+                throw new ArgumentNullException(nameof(unknownWord));
+            }
+            if (availableLetters == null)
+            {
+                throw new ArgumentNullException(nameof(availableLetters));
+            }
             var wordLen = unknownWord.WordPattern.Length;
             if (wordLen != availableLetters.Length)
             {

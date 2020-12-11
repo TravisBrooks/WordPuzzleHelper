@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordPuzzleHelperConsole", "WordPuzzleHelperConsole\WordPuzzleHelperConsole.csproj", "{D2A8458C-0692-4254-BA9A-5D485D6A0F13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordPuzzleHelper", "WordPuzzleHelper\WordPuzzleHelper.csproj", "{F601FCB9-CA72-49E4-8D3A-55E02327702A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordPuzzleHelper", "WordPuzzleHelper\WordPuzzleHelper.csproj", "{F601FCB9-CA72-49E4-8D3A-55E02327702A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordPuzzleHelperTest", "WordPuzzleHelperTest\WordPuzzleHelperTest.csproj", "{87D3B1A5-56A0-4E12-8319-79B363B44CBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F601FCB9-CA72-49E4-8D3A-55E02327702A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F601FCB9-CA72-49E4-8D3A-55E02327702A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F601FCB9-CA72-49E4-8D3A-55E02327702A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87D3B1A5-56A0-4E12-8319-79B363B44CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D3B1A5-56A0-4E12-8319-79B363B44CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D3B1A5-56A0-4E12-8319-79B363B44CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D3B1A5-56A0-4E12-8319-79B363B44CBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using WordPuzzleHelper;
+﻿using System.IO;
+using WordPuzzleHelper;
 
 namespace WordPuzzleHelperConsole
 {
@@ -7,7 +8,7 @@ namespace WordPuzzleHelperConsole
 
         static void Main(string[] args)
         {
-            var knownWords = new KnownWords(ConfigValues.WordFileName);
+            var knownWords = new KnownWords(File.ReadAllLines(ConfigValues.WordFileName));
             ConsoleController.MainMenu(knownWords);
         }
 
