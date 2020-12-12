@@ -19,8 +19,8 @@ namespace WordPuzzleHelperConsole
             Console.WriteLine("Enter the number for what type of puzzle you are trying to solve:");
             Console.WriteLine("1. Anagram");
             Console.WriteLine("2. Crossword");
-            Console.WriteLine("3. Scrabble");
-            Console.WriteLine("4. Word Slide");
+            Console.WriteLine("3. Word Slide");
+            //Console.WriteLine("4. Scrabble");
             var choiceStr = _ReadLn();
             if (int.TryParse(choiceStr, out var choice))
             {
@@ -35,11 +35,11 @@ namespace WordPuzzleHelperConsole
                             CrosswordMenu(knownWords);
                             break;
                         case 3:
-                            ScrabbleMenu(knownWords);
-                            break;
-                        case 4:
                             WordSlideMenu(knownWords);
                             break;
+                        //case 4:
+                        //    ScrabbleMenu(knownWords);
+                        //    break;
                         default:
                             Console.WriteLine("The menu option " + choice + " is not available.");
                             SolveMoreOrQuit(knownWords);
@@ -130,25 +130,25 @@ namespace WordPuzzleHelperConsole
             return intList.ToArray();
         }
 
-        public static void ScrabbleMenu(KnownWords knownWords)
-        {
-            Console.WriteLine($"Enter what you know about the word with {UnknownWord.UnknownToken} for missing characters:");
-            var wordPattern = _ReadUnknownWord();
+        //public static void ScrabbleMenu(KnownWords knownWords)
+        //{
+        //    Console.WriteLine($"Enter what you know about the word with {UnknownWord.UnknownToken} for missing characters:");
+        //    var wordPattern = _ReadUnknownWord();
 
-            Console.WriteLine("Type available letters as a single string with no spaces:");
-            var availableLetters = _ReadAvailableLetters();
+        //    Console.WriteLine("Type available letters as a single string with no spaces:");
+        //    var availableLetters = _ReadAvailableLetters();
 
-            var scrabblePuzzle = new ScrabblePuzzle(knownWords);
-            var answers = scrabblePuzzle.Solve(wordPattern, availableLetters).ToList();
+        //    var scrabblePuzzle = new ScrabblePuzzle(knownWords);
+        //    var answers = scrabblePuzzle.Solve(wordPattern, availableLetters).ToList();
 
-            Console.WriteLine($"There are {answers.Count} possible solutions:");
-            foreach (var answer in answers)
-            {
-                Console.WriteLine(answer);
-            }
+        //    Console.WriteLine($"There are {answers.Count} possible solutions:");
+        //    foreach (var answer in answers)
+        //    {
+        //        Console.WriteLine(answer);
+        //    }
 
-            SolveMoreOrQuit(knownWords);
-        }
+        //    SolveMoreOrQuit(knownWords);
+        //}
 
         private static string _ReadLn()
         {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text.Json;
 using NUnit.Framework;
 using WordPuzzleHelper.Util;
 
@@ -16,8 +15,8 @@ namespace WordPuzzleHelperTest.Util
         [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         public void PermutationNull()
         {
-            int[] testArr = null;
-            Assert.Throws<ArgumentNullException>(() => Permutations.OfSampleSize(testArr, 1).ToList(), "Its expected that a null array is not a valid argument");
+            var ex = Assert.Throws<ArgumentNullException>(() => Permutations.OfSampleSize(someList: (int[]) null, 1).ToList());
+            Assert.That(ex.ParamName, Is.EqualTo("someList"), "had ArgumentNullException but not for expected parameter");
         }
 
         [Test]
@@ -25,7 +24,8 @@ namespace WordPuzzleHelperTest.Util
         public void PermutationEmpty()
         {
             var testArr = Array.Empty<int>();
-            Assert.Throws<ArgumentException>(() => Permutations.OfSampleSize(testArr, 1).ToList(),"Its expected that an empty array is not a valid argument");
+            var ex = Assert.Throws<ArgumentException>(() => Permutations.OfSampleSize(someList: testArr, 1).ToList(),"Its expected that an empty array is not a valid argument");
+            Assert.That(ex.Message, Is.EqualTo("someList cannot be empty."));
         }
 
         [Test]
@@ -38,12 +38,19 @@ namespace WordPuzzleHelperTest.Util
 
         [Test]
         [TestCaseSource(nameof(_PermutationTestDataArgumentException))]
+        [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed")]
         public void PermutationOfSampleSizeArgumentException(int[] someList, int ofSampleSize)
         {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            Assert.Throws<ArgumentException>(() => Permutations.OfSampleSize(someList, ofSampleSize).ToList());
+            var ex = Assert.Throws<ArgumentException>(() => Permutations.OfSampleSize(someList, ofSampleSize).ToList());
+            if (ofSampleSize <= 0)
+            {
+                Assert.That(ex.Message, Is.EqualTo($"sampleSize must be greater than 0, was {ofSampleSize}"));
+            }
+            else
+            {
+                Assert.That(ex.Message, Is.EqualTo($"sampleSize cannot be greater than list length, sampleSize: {ofSampleSize}, list length: {someList.Length}"));
+            }
         }
-
 
         [Test]
         [TestCaseSource(nameof(_CartesianProductTestData))]

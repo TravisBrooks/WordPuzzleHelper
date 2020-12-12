@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
 using WordPuzzleHelper;
@@ -18,28 +19,29 @@ namespace WordPuzzleHelperTest
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void CtorThrowsForNull()
         {
-            string pattern = null;
-            // ReSharper disable once ObjectCreationAsStatement
-            // ReSharper disable once ExpressionIsAlwaysNull
-            Assert.Throws<ArgumentNullException>(() => new UnknownWord(pattern));
+            var ex = Assert.Throws<ArgumentNullException>(() => new UnknownWord(pattern: null));
+            Assert.That(ex.ParamName, Is.EqualTo("pattern"), "had ArgumentNullException but not for expected parameter");
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void CtorThrowsForWhitespace()
         {
             var pattern = "   ";
-            // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<ArgumentException>(() => new UnknownWord(pattern));
+            var ex = Assert.Throws<ArgumentException>(() => new UnknownWord(pattern));
+            Assert.That(ex.Message, Is.EqualTo("pattern cannot be only whitespace"));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void CtorThrowsForMoreThanOneWord()
         {
             var pattern = "one two";
-            // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<ArgumentException>(() => new UnknownWord(pattern));
+            var ex = Assert.Throws<ArgumentException>(() => new UnknownWord(pattern));
+            Assert.That(ex.Message, Is.EqualTo($"The word pattern had some unexpected white space in it (ie it is several words): {pattern}"));
         }
 
         [Test]
@@ -60,7 +62,8 @@ namespace WordPuzzleHelperTest
             var wordPatternLength = 11;
             Assert.That(subject.WordPattern.Length, Is.EqualTo(wordPatternLength), "precondition: the length of the WordPattern");
             Assert.That(subWordCounts.Sum(), Is.LessThan(wordPatternLength), "precondition: the subWordCounts about to be applied add up to less than the length of word pattern");
-            Assert.Throws<ArgumentException>(() => subject.SetSubWordCounts(subWordCounts));
+            var ex = Assert.Throws<ArgumentException>(() => subject.SetSubWordCounts(subWordCounts));
+            Assert.That(ex.Message, Is.EqualTo("Summing all the word counts is " + subWordCounts.Sum() + " but unknown word has " + wordPatternLength + " letters."));
         }
 
         [Test]
@@ -72,7 +75,8 @@ namespace WordPuzzleHelperTest
             var wordPatternLength = 11;
             Assert.That(subject.WordPattern.Length, Is.EqualTo(wordPatternLength), "precondition: the length of the WordPattern");
             Assert.That(subWordCounts.Sum(), Is.GreaterThan(wordPatternLength), "precondition: the subWordCounts about to be applied add up to more than the length of word pattern");
-            Assert.Throws<ArgumentException>(() => subject.SetSubWordCounts(subWordCounts));
+            var ex = Assert.Throws<ArgumentException>(() => subject.SetSubWordCounts(subWordCounts));
+            Assert.That(ex.Message, Is.EqualTo("Summing all the word counts is " + subWordCounts.Sum() + " but unknown word has " + wordPatternLength + " letters."));
         }
 
         [Test]
@@ -91,7 +95,8 @@ namespace WordPuzzleHelperTest
             var pattern = "??";
             var subject = new UnknownWord(pattern);
             var letters = new[] {'x'};
-            Assert.Throws<ArgumentException>(() => subject.FillInUnknown(letters));
+            var ex = Assert.Throws<ArgumentException>(() => subject.FillInUnknown(letters));
+            Assert.That(ex.Message, Is.EqualTo($"You provided {letters.Length} letters but the unknown characters are {pattern.Length}.  These 2 counts must be the same."));
         }
 
         [Test]
@@ -100,7 +105,8 @@ namespace WordPuzzleHelperTest
             var pattern = "??";
             var subject = new UnknownWord(pattern);
             var letters = new[] { 'x', 'y', 'z' };
-            Assert.Throws<ArgumentException>(() => subject.FillInUnknown(letters));
+            var ex = Assert.Throws<ArgumentException>(() => subject.FillInUnknown(letters));
+            Assert.That(ex.Message, Is.EqualTo($"You provided {letters.Length} letters but the unknown characters are {pattern.Length}.  These 2 counts must be the same."));
         }
 
         [Test]

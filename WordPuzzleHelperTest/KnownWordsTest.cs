@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
 using WordPuzzleHelper;
@@ -10,38 +11,40 @@ namespace WordPuzzleHelperTest
     public class KnownWordsTest
     {
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
         public void NullKnownWords()
         {
             string[] allWords = null;
-            // ReSharper disable once ObjectCreationAsStatement
-            // ReSharper disable once ExpressionIsAlwaysNull
-            Assert.Throws<ArgumentNullException>(() => new KnownWords(allWords));
+            var ex = Assert.Throws<ArgumentNullException>(() => new KnownWords(allKnownWords: allWords));
+            Assert.That(ex.ParamName, Is.EqualTo("allKnownWords"), "had ArgumentNullException but not for expected parameter");
         }
 
         [Test]
         [TestCaseSource(nameof(_WordsWithWhiteSpaceData))]
-        public void WordsCannotHaveWhiteSpaceInsideThem(IEnumerable<string> allWords)
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        public void WordsCannotHaveWhiteSpaceInsideThem(string word)
         {
-            // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<ArgumentException>(() => new KnownWords(allWords));
+            var ex = Assert.Throws<ArgumentException>(() => new KnownWords(new []{word}));
+            Assert.That(ex.Message, Is.EqualTo($"A word in the dictionary had some unexpected white space in it (ie it is several words): {word}"));
         }
 
         private static IEnumerable<TestCaseData> _WordsWithWhiteSpaceData()
         {
             {
-                IEnumerable<string> allWords = new[] { "white space" };
-                yield return new TestCaseData(allWords).SetName("space char");
+                var word = "white space";
+                yield return new TestCaseData(word).SetName("space char");
             }
 
             {
-                IEnumerable<string> allWords = new [] { @"white
-space" };
-                yield return new TestCaseData(allWords).SetName("carriage return");
+                var word = @"white
+space";
+                yield return new TestCaseData(word).SetName("carriage return");
             }
 
             {
-                IEnumerable<string> allWords = new [] { "white\tspace" };
-                yield return new TestCaseData(allWords).SetName("tab char");
+                var word = "white\tspace";
+                yield return new TestCaseData(word).SetName("tab char");
             }
         }
 
@@ -73,7 +76,8 @@ space" };
         {
             var allWords = new[] { string.Empty, "aa", "bb", "aaa", "bbb", "1234" };
             var knownWords = new KnownWords(allWords);
-            Assert.Throws<ArgumentException>(() => knownWords.AllWordsOfLength(0));
+            var ex = Assert.Throws<ArgumentException>(() => knownWords.AllWordsOfLength(0));
+            Assert.That(ex.Message, Is.EqualTo("A known word must have at least 1 character"));
         }
 
         [Test]

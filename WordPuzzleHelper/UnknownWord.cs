@@ -22,7 +22,7 @@ namespace WordPuzzleHelper
 
             if (string.IsNullOrWhiteSpace(pattern))
             {
-                throw new ArgumentException(nameof(pattern) + " cannot be only whitespace");
+                throw new ArgumentException($"{nameof(pattern)} cannot be only whitespace");
             }
 
             pattern = pattern.Trim();
@@ -72,7 +72,7 @@ namespace WordPuzzleHelper
             var letterCnt = letters.Count;
             if (letterCnt != UnknownCharCount)
             {
-                throw new ArgumentException("You provided " + letterCnt + " letters but the unknown characters are " + UnknownCharCount + ".  These 2 counts must be the same.");
+                throw new ArgumentException($"You provided {letterCnt} letters but the unknown characters are {UnknownCharCount}.  These 2 counts must be the same.");
             }
 
             var letterIndex = 0;

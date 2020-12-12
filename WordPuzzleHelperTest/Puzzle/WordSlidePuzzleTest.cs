@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
 using WordPuzzleHelper;
@@ -19,24 +20,27 @@ namespace WordPuzzleHelperTest.Puzzle
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void NullUnknownCtor()
         {
-            // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<ArgumentNullException>(() => new WordSlidePuzzle(null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new WordSlidePuzzle(knownWords: null));
+            Assert.That(ex.ParamName, Is.EqualTo("knownWords"), "had ArgumentNullException but not for expected parameter");
         }
 
         [Test]
         public void SolveNullUnknown()
         {
             var puzzle = new WordSlidePuzzle(new KnownWords(Enumerable.Empty<string>()));
-            Assert.Throws<ArgumentNullException>(() => puzzle.Solve(null, Array.Empty<char[]>()));
+            var ex = Assert.Throws<ArgumentNullException>(() => puzzle.Solve(unknownWord: null, Array.Empty<char[]>()));
+            Assert.That(ex.ParamName, Is.EqualTo("unknownWord"), "had ArgumentNullException but not for expected parameter");
         }
 
         [Test]
         public void SolveNullLetters()
         {
             var puzzle = new WordSlidePuzzle(new KnownWords(Enumerable.Empty<string>()));
-            Assert.Throws<ArgumentNullException>(() => puzzle.Solve(new UnknownWord("test"), null));
+            var ex = Assert.Throws<ArgumentNullException>(() => puzzle.Solve(new UnknownWord("test"), availableLetters: null));
+            Assert.That(ex.ParamName, Is.EqualTo("availableLetters"), "had ArgumentNullException but not for expected parameter");
         }
 
         [Test]
@@ -49,8 +53,8 @@ namespace WordPuzzleHelperTest.Puzzle
                 new[] {'b'},
                 new[] {'c'}
             };
-            Assert.Throws<ArgumentException>(() => puzzle.Solve(unknownWord, letters), 
-                "unknown word had 4 letters, there were only 3 arrays of letters so the letters were a slot short of matching word length");
+            var ex = Assert.Throws<ArgumentException>(() => puzzle.Solve(unknownWord, letters));
+            Assert.That(ex.Message, Is.EqualTo("The partial word had a length of 4 but the available letters only had 3 slots."));
         }
 
         [Test]

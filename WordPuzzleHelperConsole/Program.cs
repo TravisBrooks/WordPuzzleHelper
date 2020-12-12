@@ -8,7 +8,7 @@ namespace WordPuzzleHelperConsole
 
         static void Main(string[] args)
         {
-            var knownWords = new KnownWords(File.ReadAllLines(ConfigValues.WordFileName));
+            var knownWords = new KnownWords(File.ReadLines(ConfigValues.WordFileName));
             ConsoleController.MainMenu(knownWords);
         }
 
