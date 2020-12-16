@@ -31,15 +31,15 @@ namespace WordPuzzleHelperTest.Puzzle
         public void SolveNullUnknown()
         {
             var puzzle = new WordSlidePuzzle(new KnownWords(Enumerable.Empty<string>()));
-            var ex = Assert.Throws<ArgumentNullException>(() => puzzle.Solve(unknownWord: null, Array.Empty<char[]>()));
-            Assert.That(ex.ParamName, Is.EqualTo("unknownWord"), "had ArgumentNullException but not for expected parameter");
+            var ex = Assert.Throws<ArgumentNullException>(() => puzzle.Solve(pattern: null, Array.Empty<char[]>()));
+            Assert.That(ex.ParamName, Is.EqualTo("pattern"), "had ArgumentNullException but not for expected parameter");
         }
 
         [Test]
         public void SolveNullLetters()
         {
             var puzzle = new WordSlidePuzzle(new KnownWords(Enumerable.Empty<string>()));
-            var ex = Assert.Throws<ArgumentNullException>(() => puzzle.Solve(new UnknownWord("test"), availableLetters: null));
+            var ex = Assert.Throws<ArgumentNullException>(() => puzzle.Solve("test", availableLetters: null));
             Assert.That(ex.ParamName, Is.EqualTo("availableLetters"), "had ArgumentNullException but not for expected parameter");
         }
 
@@ -47,42 +47,134 @@ namespace WordPuzzleHelperTest.Puzzle
         public void SolveLetterSizeMismatch()
         {
             var puzzle = new WordSlidePuzzle(new KnownWords(Enumerable.Empty<string>()));
-            var unknownWord = new UnknownWord("????");
             char[][] letters = {
                 new[] {'a'},
                 new[] {'b'},
                 new[] {'c'}
             };
-            var ex = Assert.Throws<ArgumentException>(() => puzzle.Solve(unknownWord, letters));
+            var ex = Assert.Throws<ArgumentException>(() => puzzle.Solve("????", letters));
             Assert.That(ex.Message, Is.EqualTo("The partial word had a length of 4 but the available letters only had 3 slots."));
         }
 
         [Test]
-        [TestCaseSource(nameof(_SolveTestData))]
-        public void SolveTest(KnownWords knownWords, UnknownWord unknownWord, char[][] letters, string expectedWord)
+        public void SolveNullSubWordAvailableLetterMismatch()
+        {
+            var knownWord = "four";
+            var knownWords = new KnownWords(new [] {knownWord});
+            //var unknownWord = new UnknownWord(new string(UnknownWord.UnknownToken, knownWord.Length + 1));
+            var wordPattern = new string(UnknownWord.UnknownToken, knownWord.Length + 1);
+            Assert.That(knownWords.AllWordsOfLength(wordPattern.Length), Is.Empty, "precondition: there is no known word the length of the unknown word");
+            //Assert.That(unknownWord.SubWordCounts, Is.Null, "precondition: unknownWord.SubWordCounts must be null");
+            var puzzle = new WordSlidePuzzle(knownWords);
+            var availableLetters = new char[wordPattern.Length][];
+            for (var i = 0; i < availableLetters.Length; i++)
+            {
+                availableLetters[i] = new[] {'X'};
+            }
+
+            var solutions = puzzle.Solve(wordPattern, availableLetters);
+            Assert.That(solutions, Is.Empty, "If there are no known words of the required length the solution should be empty");
+        }
+
+        // TODO: WordSlidePuzzle doesn't currently know how to solve multiwords
+        //[Test]
+        //public void SolveSetSubWordAvailableLetterMismatch()
+        //{
+        //    var w1 = "un";
+        //    var w2 = "two";
+        //    var knownWords = new KnownWords(new[] { "three", "four" });
+        //    var pattern = new string(UnknownWord.UnknownToken, (w1 + w2).Length);
+        //    var unknownWord = new UnknownWord(pattern);
+        //    unknownWord.SetSubWordCounts(new[] { w1.Length, w2.Length });
+        //    Assert.That(knownWords.AllWordsOfLength(w1.Length), Is.Empty, "precondition: no known word of length of a sub word");
+        //    Assert.That(unknownWord.SubWordCounts, Is.EquivalentTo(new[] { w1.Length, w2.Length }));
+        //    var puzzle = new WordSlidePuzzle(knownWords);
+        //    var availableLetters = new char[unknownWord.WordPattern.Length][];
+        //    for (var i = 0; i < availableLetters.Length; i++)
+        //    {
+        //        availableLetters[i] = new[] { 'X' };
+        //    }
+
+        //    var solutions = puzzle.Solve(unknownWord, availableLetters);
+        //    Assert.That(solutions, Is.Empty, "If there are no known words of the required length the solution should be empty");
+        //}
+
+        [Test]
+        [TestCaseSource(nameof(_SolveSingleWordTestData))]
+        public void SolveSingleWord(KnownWords knownWords, string wordPattern, char[][] letters, string expectedWord)
         {
             var puzzle = new WordSlidePuzzle(knownWords);
-            var solutions = puzzle.Solve(unknownWord, letters);
+            var solutions = puzzle.Solve(wordPattern, letters);
             Assert.That(solutions.Contains(expectedWord));
         }
 
-        public static IEnumerable<TestCaseData> _SolveTestData()
+        //[Test]
+        ////[TestCaseSource(nameof(_SolveMultiWordTestData))]
+        //public void SolveMultiWord()
+        //{
+        //    var knownWords = new KnownWords(new[] { "if", "in", "an", "then", "than", "else" });
+        //    var wordPattern = new UnknownWord("??????????");
+        //    wordPattern.SetSubWordCounts(new[] { 2, 4, 4 });
+        //    char[][] letters = {
+        //        new[] {'A', 'Y', 'I'},
+        //        new[] {'F', 'N', 'O'},
+        //        new[] {'t', 'H', 'O'},
+        //        new[] {'t', 'H', 'O'},
+        //        new[] {'W', 'A', 'E'},
+        //        new[] {'F', 'N', 'O'},
+        //        new[] {'W', 'A', 'E'},
+        //        new[] {'y', 'L', 'b'},
+        //        new[] {'s', 's'},
+        //        new[] {'k', 'E', 'y'},
+        //    };
+
+        //    var puzzle = new WordSlidePuzzle(knownWords);
+        //    var ex = Assert.Throws<ArgumentException>(() => puzzle.Solve(wordPattern, letters));
+        //    Assert.That(ex.Message,Is.EqualTo("A word slide puzzle cannot solve for multiple words"));
+        //}
+
+        // TODO: WordSlidePuzzle doesn't currently know how to solve multiwords
+        //public static IEnumerable<TestCaseData> _SolveMultiWordTestData()
+        //{
+        //    {
+        //        var knownWords = new KnownWords(new[] { "if", "in", "an", "then", "than", "else" });
+        //        var unknownWord = new UnknownWord("??????????");
+        //        unknownWord.SetSubWordCounts(new[] { 2, 4, 4 });
+        //        char[][] letters = {
+        //            new[] {'A', 'Y', 'I'},
+        //            new[] {'F', 'N', 'O'},
+        //            new[] {'t', 'H', 'O'},
+        //            new[] {'t', 'H', 'O'},
+        //            new[] {'W', 'A', 'E'},
+        //            new[] {'F', 'N', 'O'},
+        //            new[] {'W', 'A', 'E'},
+        //            new[] {'y', 'L', 'b'},
+        //            new[] {'s', 's'},
+        //            new[] {'k', 'E', 'y'},
+        //        };
+        //        var expectedWord = "if then else";
+        //        yield return new TestCaseData(knownWords, unknownWord, letters, expectedWord)
+        //            .SetName("expectedWord: if then else");
+        //    }
+        //}
+
+        public static IEnumerable<TestCaseData> _SolveSingleWordTestData()
         {
             {
                 var knownWords = new KnownWords(new[]{"if", "in", "an"});
-                var unknownWord = new UnknownWord("??");
+                var wordPattern = "??";
                 char[][] letters = {
                     new[] {'A', 'Y', 'I'},
                     new[] {'F', 'N', 'O'}
                 };
                 var expectedWord = "if";
-                yield return new TestCaseData(knownWords, unknownWord, letters, expectedWord)
+                yield return new TestCaseData(knownWords, wordPattern, letters, expectedWord)
                     .SetName("expectedWord: if");
             }
 
             {
                 var knownWords = new KnownWords(new[] { "walking", "talking", "walk", "talk" });
-                var unknownWord = new UnknownWord("???????");
+                var wordPattern = "w??????";
                 char[][] letters = {
                     new[] {'T', 'W'},
                     new[] {'A', 'o'},
@@ -93,7 +185,7 @@ namespace WordPuzzleHelperTest.Puzzle
                     new[] {'G', 'n'},
                 };
                 var expectedWord = "walking";
-                yield return new TestCaseData(knownWords, unknownWord, letters, expectedWord)
+                yield return new TestCaseData(knownWords, wordPattern, letters, expectedWord)
                     .SetName("expectedWord: walking");
             }
         }

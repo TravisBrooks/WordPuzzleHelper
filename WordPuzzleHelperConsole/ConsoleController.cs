@@ -182,7 +182,7 @@ namespace WordPuzzleHelperConsole
         public static void WordSlideMenu(KnownWords knownWords)
         {
             Console.WriteLine($"Enter what you know about the word with {UnknownWord.UnknownToken} for missing characters:");
-            var wordPattern = _ReadUnknownWord();
+            var wordPattern = _ReadLn();
 
             char[][] availableLetters = _ReadWordSlideLetters(wordPattern);
             var wordSlide = new WordSlidePuzzle(knownWords);
@@ -197,14 +197,14 @@ namespace WordPuzzleHelperConsole
             SolveMoreOrQuit(knownWords);
         }
 
-        private static char[][] _ReadWordSlideLetters(UnknownWord wordPattern)
+        private static char[][] _ReadWordSlideLetters(string wordPattern)
         {
-            var wordLen = wordPattern.WordPattern.Length;
+            var wordLen = wordPattern.Length;
             Console.WriteLine("Enter the available letters for each position in the word, starting at position 1:");
             var availableLetters = new char[wordLen][];
             for (var i = 0; i < wordLen; i++)
             {
-                var c = wordPattern.WordPattern[i];
+                var c = wordPattern[i];
                 if (c == UnknownWord.UnknownToken)
                 {
                     Console.WriteLine("position " + (i+1) + " enter possible letters without spaces then press enter:");

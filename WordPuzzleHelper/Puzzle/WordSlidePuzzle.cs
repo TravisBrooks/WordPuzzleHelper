@@ -16,19 +16,20 @@ namespace WordPuzzleHelper.Puzzle
         /// fill in the blank words in a phrase by sliding individual characters down to make up the words in the phrase, with words
         /// stacked on top of each other so there are multiple characters possible for each slot in a word.
         /// </summary>
-        /// <param name="unknownWord"></param>
+        /// <param name="pattern"></param>
         /// <param name="availableLetters"></param>
         /// <returns></returns>
-        public IEnumerable<string> Solve(UnknownWord unknownWord, char[][] availableLetters)
+        public IEnumerable<string> Solve(string pattern, char[][] availableLetters)
         {
-            if (unknownWord == null)
+            if (pattern == null)
             {
-                throw new ArgumentNullException(nameof(unknownWord));
+                throw new ArgumentNullException(nameof(pattern));
             }
             if (availableLetters == null)
             {
                 throw new ArgumentNullException(nameof(availableLetters));
             }
+            var unknownWord = new UnknownWord(pattern);
             var wordLen = unknownWord.WordPattern.Length;
             if (wordLen != availableLetters.Length)
             {
@@ -76,22 +77,23 @@ namespace WordPuzzleHelper.Puzzle
 
         private static bool _AllUnknownWordLengthsReasonable(KnownWords knownWords, UnknownWord unknownWord)
         {
-            if (unknownWord.SubWordCounts == null || unknownWord.SubWordCounts.Any() == false)
-            {
-                if (knownWords.AllWordsOfLength(unknownWord.WordPattern.Length).Count == 0)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (unknownWord.SubWordCounts.Any(cnt => knownWords.AllWordsOfLength(cnt).Count == 0))
-                {
-                    return false;
-                }
-            }
+            // TODO: if i ever get around to implementing subwords this fancier check will be needed.
+            //if (unknownWord.SubWordCounts == null || unknownWord.SubWordCounts.Any() == false)
+            //{
+            //    if (knownWords.AllWordsOfLength(unknownWord.WordPattern.Length).Count == 0)
+            //    {
+            //        return false;
+            //    }
+            //}
+            //else
+            //{
+            //    if (unknownWord.SubWordCounts.Any(cnt => knownWords.AllWordsOfLength(cnt).Count == 0))
+            //    {
+            //        return false;
+            //    }
+            //}
 
-            return true;
+            return knownWords.AllWordsOfLength(unknownWord.WordPattern.Length).Any();
         }
 
         /// <summary>
