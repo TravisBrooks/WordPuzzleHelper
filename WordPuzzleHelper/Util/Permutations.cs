@@ -70,16 +70,14 @@ namespace WordPuzzleHelper.Util
         private static IEnumerable<IEnumerable<T>> _CartesianProductLoop<T>(IEnumerable<T> currentList, IEnumerable<IEnumerable<T>> accumulator)
         {
             // Yes, this method can all be done in 1 call to SelectMany, but I find the syntax of SelectMany to be more confusing to read
-            var localAccumulator = new List<IEnumerable<T>>();
             foreach (var accList in accumulator)
             {
                 foreach (var item in currentList)
                 {
                     var accItem = accList.Concat(new[] {item});
-                    localAccumulator.Add(accItem);
+                    yield return accItem;
                 }
             }
-            return localAccumulator;
         }
     }
 }
